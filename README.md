@@ -1,27 +1,10 @@
-# Sentiment AI Training Add-on
+# Sentiment Colour AI Studio ULTRA
 
-This is a second HTML file that adds local training.
+Upload these two files to your GitHub repository root:
 
-## What it is
+- `index.html`
+- `master_dictionary.json`
 
-A small browser-based Naive Bayes trainer.
+Then enable GitHub Pages.
 
-It lets you:
-
-- Paste labeled examples
-- Train a local sentiment model
-- Test new text
-- Export the trained model as JSON
-- Import the model later
-
-## GitHub use
-
-Upload `ai_trainer.html` beside your main `index.html`.
-
-Open:
-
-`https://YOURNAME.github.io/YOURREPO/ai_trainer.html`
-
-## Important
-
-This is local machine learning, not cloud AI. For true AI/API classification, you would need a backend so your API key is not exposed in browser code.
+This version keeps the app modular so the dictionary can grow without turning the HTML into a huge fragile file.
