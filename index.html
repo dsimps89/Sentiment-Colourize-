@@ -10,7 +10,7 @@
 header{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:14px;align-items:center}h1{margin:0;font-size:26px}p{color:var(--muted)}
 .status{border:1px solid var(--line);background:#0b1628;border-radius:14px;padding:10px 14px;text-align:right}.status span{display:block;color:var(--muted);font-size:12px}
 .layout{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:14px;padding:14px}.panel{background:linear-gradient(180deg,var(--panel),#0b1423);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 16px 40px #0008}
-.input,.previewPanel{grid-column:span 2}.dash{grid-row:span 2}h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 12px}
+.input,.previewPanel,.sentencePanel{grid-column:span 2}.dash{grid-row:span 2}h2{font-size:14px;letter-spacing:.08em;text-transform:uppercase;margin:0 0 12px}
 textarea{width:100%;min-height:320px;background:#08111f;color:var(--text);border:1px solid var(--line);border-radius:12px;padding:14px;line-height:1.48;font-size:16px;resize:vertical}
 button,label.file,select,input{font:inherit}button,label.file{border:1px solid #36587f;background:#142641;color:var(--text);border-radius:10px;padding:9px 12px;cursor:pointer;text-align:center}button:hover,label.file:hover{background:#1b3458}.primary{background:#1a63aa;border-color:#3d93e6}.danger{background:#3b1822;border-color:#8d3446}.file input{display:none}
 .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
@@ -31,9 +31,24 @@ footer{padding:14px 22px;color:var(--muted);border-top:1px solid var(--line);fon
 <header><div><h1>Sentiment Colour AI Studio ULTRA</h1><p>Modular dictionary, local AI training, domain layers, entities, and exports.</p></div><div class="status"><b id="readyState">Loading dictionary...</b><span id="dictStats">master_dictionary.json</span></div></header>
 <main class="layout">
 <section class="panel input"><h2>1. Input</h2><textarea id="inputText" placeholder="Paste large text here."></textarea><div class="row"><button id="sampleBtn">Load Sample</button><button id="clearBtn">Clear</button><label class="file">Import .txt<input id="fileInput" type="file" accept=".txt,.md,.csv,.html"></label><label class="file">Import Dictionary<input id="dictInput" type="file" accept=".json"></label></div><div class="meter"><div id="limitBar"></div></div><div class="statsline"><span id="charCount">0 chars</span><span id="wordCount">0 words</span><span id="lineCount">0 lines</span></div></section>
-<section class="panel controls"><h2>2. Controls</h2><div class="grid2"><label>Mode<select id="mode"><option value="hybrid">Hybrid all layers</option><option value="sentiment">Sentiment only</option><option value="domain">Domain groups</option><option value="entity">Entities only</option><option value="ai">Local AI only</option></select></label><label>Format<select id="format"><option value="paragraphs">Paragraphs</option><option value="sentences">Sentence blocks</option><option value="poetry">Line preserved</option><option value="compact">Compact</option></select></label><label>Preview limit<input id="previewLimit" type="range" min="2000" max="60000" step="1000" value="16000"></label><label>Font size<input id="fontSize" type="range" min="12" max="34" value="18"></label></div><div class="row"><button id="processBtn" class="primary">Analyze + Colourize</button><button id="renderAllBtn">Render Full</button><button id="stopBtn" class="danger">Stop</button></div><p class="note">Full render on huge documents can be memory-heavy. Use preview first.</p></section>
+<section class="panel controls"><h2>2. Controls</h2><div class="grid2"><label>Mode<select id="mode"><option value="hybrid">Hybrid all layers</option><option value="sentiment">Sentiment only</option><option value="domain">Domain groups</option><option value="entity">Entities only</option><option value="ai">Local AI only</option></select></label><label>Format<select id="format"><option value="paragraphs">Paragraphs</option><option value="sentences">Sentence blocks</option><option value="poetry">Line preserved</option><option value="compact">Compact</option></select></label><label>Preview limit<input id="previewLimit" type="range" min="2000" max="60000" step="1000" value="16000"></label><label>Font size<input id="fontSize" type="range" min="12" max="34" value="18"></label></div><div class="row"><button id="processBtn" class="primary">Analyze + Colourize</button><button id="sentenceBtn">Sentence Analysis</button><button id="correctBtn">Suggest Corrections</button><button id="applyCorrectionsBtn">Apply Corrections</button><button id="renderAllBtn">Render Full</button><button id="stopBtn" class="danger">Stop</button></div><p class="note">Full render on huge documents can be memory-heavy. Use preview first.</p></section>
 <section class="panel dash"><h2>3. Dashboard</h2><div class="cards"><div class="card"><span>Positive</span><b id="posCount">0</b></div><div class="card"><span>Negative</span><b id="negCount">0</b></div><div class="card"><span>Neutral</span><b id="neuCount">0</b></div><div class="card"><span>Score</span><b id="score">0.000</b></div><div class="card"><span>Names</span><b id="nameCount">0</b></div><div class="card"><span>Groups</span><b id="groupCount">0</b></div></div><canvas id="chart" width="720" height="230"></canvas><h2 style="margin-top:14px">Layers</h2><div id="legend" class="legend"></div></section>
 <section class="panel training"><h2>4. Local AI Training</h2><textarea id="trainingData" style="min-height:170px" placeholder="positive, text here&#10;negative, text here&#10;neutral, text here&#10;risk, text here"></textarea><div class="row"><button id="trainBtn" class="primary">Train Model</button><button id="sampleTrainBtn">Sample Training</button><label class="file">Import Model<input id="modelInput" type="file" accept=".json"></label><button id="exportModel">Export Model</button></div><pre id="modelLog">No model trained yet.</pre></section>
+
+<section class="panel sentencePanel">
+<h2>Sentence + Correction Panel</h2>
+<div class="grid2">
+<div>
+<h2>Sentence Analysis</h2>
+<pre id="sentenceLog">Run Sentence Analysis to score text from period to period.</pre>
+</div>
+<div>
+<h2>Spelling / Grammar Suggestions</h2>
+<pre id="correctionLog">Run Suggest Corrections to detect common issues.</pre>
+</div>
+</div>
+</section>
+
 <section class="panel previewPanel"><h2>5. Preview</h2><div class="toolbar row"><button id="zoomOut">A−</button><button id="zoomIn">A+</button><button id="copyHtml">Copy HTML</button><button id="copyPlain">Copy Plain</button></div><article id="preview" class="preview"></article></section>
 <section class="panel exports"><h2>6. Export</h2><div class="grid2"><button id="exportHtml">Export HTML</button><button id="exportTxt">Export TXT</button><button id="exportJson">Export JSON</button><button id="exportCsv">Export CSV</button><button id="exportPdf">PDF / Print</button><button id="exportSettings">Export Settings</button></div></section>
 </main><footer>GitHub Pages app. Uses index.html + master_dictionary.json.</footer>
@@ -44,7 +59,7 @@ const $=id=>document.getElementById(id), esc=s=>String(s).replace(/[&<>"']/g,c=>
 async function loadDict(){try{const r=await fetch("master_dictionary.json",{cache:"no-store"}); DICT=await r.json(); setupDict();}catch(e){$("readyState").textContent="Dictionary not auto-loaded";$("dictStats").textContent="Use Import Dictionary";}}
 function setupDict(){SETS={}; for(const sec of ["sentiment","domains","grammar"]){for(const [k,v] of Object.entries(DICT[sec]||{}))SETS[k]=new Set(v.map(x=>String(x).toLowerCase()));} PATTERNS={}; for(const [k,arr] of Object.entries(DICT.patterns||{}))PATTERNS[k]=arr.map(x=>new RegExp(x,"i")); $("readyState").textContent="Ready"; $("dictStats").textContent=`${Object.keys(SETS).length} categories loaded`; buildLegend(); resetModel();}
 document.addEventListener("DOMContentLoaded",()=>{bind(); updateCounts(); drawChart([]); loadDict();});
-function bind(){$("inputText").oninput=updateCounts;$("sampleBtn").onclick=sample;$("clearBtn").onclick=clearAll;$("fileInput").onchange=importText;$("dictInput").onchange=importDict;$("processBtn").onclick=()=>process(false);$("renderAllBtn").onclick=()=>process(true);$("stopBtn").onclick=()=>stopped=true;$("zoomIn").onclick=()=>font(1);$("zoomOut").onclick=()=>font(-1);$("copyHtml").onclick=()=>navigator.clipboard.writeText(fullHtml||"");$("copyPlain").onclick=()=>navigator.clipboard.writeText(plainText||"");$("trainBtn").onclick=train;$("sampleTrainBtn").onclick=sampleTrain;$("modelInput").onchange=importModel;$("exportModel").onclick=()=>save("local_ai_model.json","application/json",JSON.stringify(aiModel,null,2));$("exportHtml").onclick=exportHtml;$("exportTxt").onclick=()=>save("text.txt","text/plain",plainText||"");$("exportJson").onclick=()=>save("analysis.json","application/json",JSON.stringify({result:lastResult,settings:getSettings()},null,2));$("exportCsv").onclick=exportCsv;$("exportPdf").onclick=exportPdf;$("exportSettings").onclick=()=>save("settings.json","application/json",JSON.stringify(getSettings(),null,2));}
+function bind(){$("inputText").oninput=updateCounts;$("sampleBtn").onclick=sample;$("clearBtn").onclick=clearAll;$("fileInput").onchange=importText;$("dictInput").onchange=importDict;$("processBtn").onclick=()=>process(false);$("sentenceBtn").onclick=sentenceAnalysis;$("correctBtn").onclick=suggestCorrections;$("applyCorrectionsBtn").onclick=applyCorrections;$("renderAllBtn").onclick=()=>process(true);$("stopBtn").onclick=()=>stopped=true;$("zoomIn").onclick=()=>font(1);$("zoomOut").onclick=()=>font(-1);$("copyHtml").onclick=()=>navigator.clipboard.writeText(fullHtml||"");$("copyPlain").onclick=()=>navigator.clipboard.writeText(plainText||"");$("trainBtn").onclick=train;$("sampleTrainBtn").onclick=sampleTrain;$("modelInput").onchange=importModel;$("exportModel").onclick=()=>save("local_ai_model.json","application/json",JSON.stringify(aiModel,null,2));$("exportHtml").onclick=exportHtml;$("exportTxt").onclick=()=>save("text.txt","text/plain",plainText||"");$("exportJson").onclick=()=>save("analysis.json","application/json",JSON.stringify({result:lastResult,settings:getSettings()},null,2));$("exportCsv").onclick=exportCsv;$("exportPdf").onclick=exportPdf;$("exportSettings").onclick=()=>save("settings.json","application/json",JSON.stringify(getSettings(),null,2));}
 function buildLegend(){const names=["positive","negative","uncertainty","risk","credibility_positive","credibility_negative","police","legal","medical","military","finance","location","action_verbs","pronouns","negators","intensifiers","name","date","time","money","number","noun","adjective"]; $("legend").innerHTML=names.map(n=>`<label><input class="layer" type="checkbox" value="${n}" checked><span class="sw" style="background:#1e90ff"></span>${n}</label>`).join("");}
 function layers(){return new Set([...document.querySelectorAll(".layer:checked")].map(x=>x.value));}
 function updateCounts(){let t=$("inputText").value||"", w=t.trim()?t.trim().split(/\s+/).length:0;$("charCount").textContent=t.length.toLocaleString()+" chars";$("wordCount").textContent=w.toLocaleString()+" words";$("lineCount").textContent=(t?(t.match(/\n/g)||[]).length+1:0)+" lines";$("limitBar").style.width=Math.min(100,w/1000000*100)+"%";}
@@ -64,9 +79,135 @@ const tokAI=t=>(String(t).toLowerCase().match(/[a-z][a-z'-]{1,}/g)||[]);
 function train(){resetModel();let used=0;for(const line of $("trainingData").value.split(/\n+/)){let i=line.indexOf(",");if(i<0)continue;let lab=line.slice(0,i).trim().toLowerCase();if(!aiModel.labels.includes(lab))continue;aiModel.docCounts[lab]++;for(const w of tokAI(line.slice(i+1))){aiModel.wordCounts[lab][w]=(aiModel.wordCounts[lab][w]||0)+1;aiModel.totalWords[lab]++;aiModel.vocabulary[w]=true;}used++;}$("modelLog").textContent=`Trained on ${used} examples. Vocabulary: ${Object.keys(aiModel.vocabulary).length}`;}
 function sampleTrain(){$("trainingData").value="positive, clear reliable helpful accurate strong\nnegative, confusing unreliable false inconsistent hostile\nneutral, file uploaded reviewed and processed\ncredible, corroborated verified consistent documented\nuncertain, maybe unclear appears possibly unknown\nrisk, danger threat urgent unsafe escalation";}
 function importModel(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{aiModel=JSON.parse(r.result);$("modelLog").textContent="Model imported.";};r.readAsText(f);}
+
+function splitSentences(text){
+  return (text.match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[]).map(s=>s.trim()).filter(Boolean);
+}
+
+function sentenceAnalysis(){
+  if(!DICT){$("sentenceLog").textContent="Dictionary not loaded.";return;}
+  const text=$("inputText").value||"";
+  const sentences=splitSentences(text);
+  if(!sentences.length){$("sentenceLog").textContent="No sentences found.";return;}
+  const rows=[];
+  let totalScore=0;
+  sentences.slice(0,500).forEach((s,i)=>{
+    const words=s.match(/[^\s]+/g)||[];
+    let p=0,n=0,tagsFound={};
+    words.forEach(w=>{
+      const k=key(w), sv=sent(k);
+      if(sv>0)p++; if(sv<0)n++;
+      tags(w,"").forEach(tag=>tagsFound[tag]=(tagsFound[tag]||0)+1);
+    });
+    const score=(p-n)/Math.max(1,words.length);
+    totalScore+=score;
+    const topTags=Object.entries(tagsFound).sort((a,b)=>b[1]-a[1]).slice(0,5).map(x=>x[0]).join(", ");
+    rows.push(`${String(i+1).padStart(3,"0")} | score ${score.toFixed(3).padStart(7)} | +${p} -${n} | ${topTags}\n${s}`);
+  });
+  $("sentenceLog").textContent=`Sentences analyzed: ${sentences.length}\nAverage sentence score: ${(totalScore/Math.max(1,sentences.length)).toFixed(3)}\nShowing first 500 sentences.\n\n`+rows.join("\n\n");
+}
+
+let pendingCorrections=[];
+
+function buildKnownWords(){
+  const known=new Set();
+  if(DICT){
+    for(const section of ["sentiment","domains","grammar"]){
+      for(const arr of Object.values(DICT[section]||{})) arr.forEach(w=>known.add(String(w).toLowerCase()));
+    }
+  }
+  ["the","and","that","this","there","their","because","with","from","have","were","was","are","been","being","into","about","would","could","should","before","after","between","through","people","person","document","report"].forEach(w=>known.add(w));
+  return known;
+}
+
+function editDistance(a,b){
+  if(Math.abs(a.length-b.length)>2)return 99;
+  const dp=Array(a.length+1).fill(0).map(()=>Array(b.length+1).fill(0));
+  for(let i=0;i<=a.length;i++)dp[i][0]=i;
+  for(let j=0;j<=b.length;j++)dp[0][j]=j;
+  for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++){
+    dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+  }
+  return dp[a.length][b.length];
+}
+
+function closestWord(w,known){
+  if(w.length<4||known.has(w))return null;
+  let best=null,bd=3;
+  const first=w[0];
+  for(const cand of known){
+    if(cand[0]!==first || Math.abs(cand.length-w.length)>2)continue;
+    const d=editDistance(w,cand);
+    if(d<bd){bd=d;best=cand;if(d===1)break;}
+  }
+  return best;
+}
+
+function suggestCorrections(){
+  const text=$("inputText").value||"";
+  const known=buildKnownWords();
+  const suggestions=[];
+  const common={
+    "teh":"the","recieve":"receive","seperate":"separate","definately":"definitely","occured":"occurred","wich":"which","thier":"their","adn":"and","becuase":"because","suspto":"supposed to","peroid":"period","jsut":"just","lexacon":"lexicon","funcitoning":"functioning","functiong":"functioning"
+  };
+  pendingCorrections=[];
+  for(const [bad,good] of Object.entries(common)){
+    const rx=new RegExp("\\b"+bad+"\\b","gi");
+    if(rx.test(text)){suggestions.push(`${bad} → ${good}`);pendingCorrections.push([rx,good]);}
+  }
+  const words=[...new Set((text.toLowerCase().match(/[a-z][a-z']{3,}/g)||[]))].slice(0,2000);
+  for(const w of words){
+    if(common[w]||known.has(w))continue;
+    const c=closestWord(w,known);
+    if(c && c!==w){
+      suggestions.push(`${w} → ${c}`);
+      pendingCorrections.push([new RegExp("\\b"+w.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"\\b","gi"),c]);
+      if(suggestions.length>=150)break;
+    }
+  }
+  const grammar=[];
+  if(/\bi\b/.test(text)) grammar.push("Standalone lowercase “i” should usually be “I”.");
+  if(/\s{2,}/.test(text)) grammar.push("Multiple spaces detected.");
+  if(/[A-Za-z],[A-Za-z]/.test(text)) grammar.push("Comma may need a following space.");
+  if(/[.!?][a-z]/.test(text)) grammar.push("Sentence-ending punctuation may need a following space/capital.");
+  $("correctionLog").textContent=(suggestions.length?("Spelling suggestions:\n"+suggestions.join("\n")):"No spelling suggestions found.") + (grammar.length?("\n\nGrammar checks:\n"+grammar.join("\n")):"");
+}
+
+function applyCorrections(){
+  if(!pendingCorrections.length)suggestCorrections();
+  let text=$("inputText").value||"";
+  pendingCorrections.slice(0,300).forEach(([rx,good])=>{text=text.replace(rx,good);});
+  text=text.replace(/\bi\b/g,"I").replace(/\s{2,}/g," ").replace(/,([A-Za-z])/g,", $1").replace(/([.!?])([a-z])/g,(m,p,c)=>p+" "+c.toUpperCase());
+  $("inputText").value=text;
+  updateCounts();
+  $("correctionLog").textContent += "\n\nApplied available automatic corrections. Review the text manually.";
+}
+
 function font(d){let n=Math.max(12,Math.min(36,Number($("fontSize").value)+d));$("fontSize").value=n;$("preview").style.fontSize=n+"px";}
 function save(n,t,d){let a=document.createElement("a");a.href=URL.createObjectURL(new Blob([d],{type:t}));a.download=n;a.click();}
-function docHtml(){return `<!doctype html><html><head><meta charset="utf-8"><title>Colourized Text</title><style>${document.querySelector("style").textContent}</style></head><body><article class="preview">${fullHtml}</article></body></html>`;}
+function statsHtml(){
+  const r=lastResult||{positive:0,negative:0,neutral:0,total:0,score:0,names:0,groups:0};
+  const date=new Date().toLocaleString();
+  return `<section class="report-cover">
+    <h1>Sentiment Colour AI Studio ULTRA Report</h1>
+    <p><b>Generated:</b> ${date}</p>
+    <table class="report-table">
+      <tr><td>Total words</td><td>${(r.total||0).toLocaleString()}</td></tr>
+      <tr><td>Positive words</td><td>${(r.positive||0).toLocaleString()}</td></tr>
+      <tr><td>Negative words</td><td>${(r.negative||0).toLocaleString()}</td></tr>
+      <tr><td>Neutral words</td><td>${(r.neutral||0).toLocaleString()}</td></tr>
+      <tr><td>Overall score</td><td>${Number(r.score||0).toFixed(3)}</td></tr>
+      <tr><td>Name-like tokens</td><td>${(r.names||0).toLocaleString()}</td></tr>
+      <tr><td>Tagged groups</td><td>${(r.groups||0).toLocaleString()}</td></tr>
+    </table>
+    <h2>Notes</h2>
+    <p>This report contains automated local text analysis. Sentiment, grammar-like tags, names, and groups are heuristic indicators and should be reviewed by a human.</p>
+  </section>`;
+}
+function docHtml(){
+  const extra=`.report-cover{font-family:Georgia,serif;line-height:1.55;padding:40px;max-width:900px;margin:auto;page-break-after:always}.report-table{border-collapse:collapse;width:100%;margin:20px 0}.report-table td{border:1px solid #999;padding:8px}.report-table td:first-child{font-weight:bold;background:#f1f5f9}`;
+  return `<!doctype html><html><head><meta charset="utf-8"><title>Colourized Text Report</title><style>${document.querySelector("style").textContent}${extra}</style></head><body>${statsHtml()}<article class="preview">${fullHtml||esc(plainText||"")}</article></body></html>`;
+}
 function exportHtml(){save("colourized_text.html","text/html",docHtml());}
 function exportCsv(){let rows=["index,word,tags,sentiment"], toks=($("inputText").value||"").match(/[^\s]+/g)||[];toks.forEach((tok,i)=>{let k=key(tok);rows.push(`${i+1},"${tok.replace(/"/g,'""')}","${tags(tok,"").join("|")}",${sent(k)}`);});save("word_analysis.csv","text/csv",rows.join("\n"));}
 function exportPdf(){let w=window.open("","_blank");w.document.write(docHtml());w.document.close();setTimeout(()=>w.print(),500);}
