@@ -1,60 +1,27 @@
-# Sentiment Colour Text Studio
+# Sentiment AI Training Add-on
 
-Static GitHub-compatible HTML app for large-text formatting, sentiment colouring, and export.
+This is a second HTML file that adds local training.
 
-## What it does
+## What it is
 
-- Accepts very large pasted text.
-- Formats text as paragraphs, sentence blocks, line-preserved text, or compact text.
-- Applies word-level sentiment colouring using positive and negative lexicons.
-- Supports colour metrics:
-  - Positive / negative / neutral
-  - Intensity
-  - Local sentiment density
-  - Random colour
-  - Hybrid
-- Supports scaling:
-  - Linear
-  - Square-root
-  - Logarithmic
-  - Binary
-- Exports:
-  - HTML
-  - TXT
-  - JSON
-  - CSV
-  - Print / Save as PDF
+A small browser-based Naive Bayes trainer.
 
-## Files
+It lets you:
 
-- `index.html`
-- `style.css`
-- `app.js`
-- `assets/positive_words.json`
-- `assets/negative_words.json`
+- Paste labeled examples
+- Train a local sentiment model
+- Test new text
+- Export the trained model as JSON
+- Import the model later
 
-## GitHub Pages
+## GitHub use
 
-Upload the unzipped folder contents to a GitHub repository, then enable GitHub Pages.
+Upload `ai_trainer.html` beside your main `index.html`.
 
-## Note on very large files
+Open:
 
-The app is designed to process very large text, but browser memory still matters. The preview is limited by default for performance. Use **Render Full Preview** before full-colour HTML or PDF export.
+`https://YOURNAME.github.io/YOURREPO/ai_trainer.html`
 
-## Lexicon note
+## Important
 
-The positive and negative word lists are based on the opinion lexicon files you uploaded.
-
-
-## Fix notes
-
-This version fixes the issue where the app could stay stuck on “Loading lexicons...” if the JSON files are in the repository root instead of `/assets`.
-
-The app now checks both locations:
-
-- `/assets/positive_words.json`
-- `/assets/negative_words.json`
-- `/positive_words.json`
-- `/negative_words.json`
-
-It also binds the buttons immediately, so text counting and formatting work even if lexicon loading fails.
+This is local machine learning, not cloud AI. For true AI/API classification, you would need a backend so your API key is not exposed in browser code.
