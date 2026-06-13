@@ -44,3 +44,17 @@ The app is designed to process very large text, but browser memory still matters
 ## Lexicon note
 
 The positive and negative word lists are based on the opinion lexicon files you uploaded.
+
+
+## Fix notes
+
+This version fixes the issue where the app could stay stuck on “Loading lexicons...” if the JSON files are in the repository root instead of `/assets`.
+
+The app now checks both locations:
+
+- `/assets/positive_words.json`
+- `/assets/negative_words.json`
+- `/positive_words.json`
+- `/negative_words.json`
+
+It also binds the buttons immediately, so text counting and formatting work even if lexicon loading fails.

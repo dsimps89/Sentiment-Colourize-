@@ -29,3 +29,26 @@ canvas{width:100%;height:auto;border:1px solid #243f62;border-radius:12px;backgr
 footer{padding:16px 22px;color:var(--muted);border-top:1px solid var(--line);font-size:12px}
 @media(max-width:1100px){.layout{grid-template-columns:1fr}.input-panel,.preview-panel{grid-column:auto}.dashboard-panel{grid-row:auto}}
 @media print{body{background:white;color:black}.topbar,.input-panel,.controls-panel,.dashboard-panel,.exports-panel,.toolbar,footer{display:none}.layout{display:block}.preview-panel{border:none;box-shadow:none}.preview{max-height:none;overflow:visible;border:none;color:black}}
+
+
+/* Mobile/functionality patch */
+textarea{
+  min-height:360px;
+  font-size:16px;
+  -webkit-text-size-adjust:100%;
+}
+.preview:empty::before{
+  content:"Paste text, then tap Format + Colourize.";
+  color:#6b7280;
+}
+@media(max-width:700px){
+  .topbar{align-items:flex-start}
+  h1{font-size:34px;line-height:1.1}
+  .layout{padding:0;gap:14px}
+  .panel{border-radius:24px;padding:26px 30px}
+  textarea{height:540px;font-size:24px;line-height:1.45}
+  button,.file,select{font-size:28px;padding:18px 22px}
+  label{font-size:24px}
+  .mini-stats{font-size:20px}
+  .preview{min-height:720px;font-size:22px}
+}
