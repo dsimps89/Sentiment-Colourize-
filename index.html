@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sentiment Colour Text Studio</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <div>
+    <h1>Sentiment Colour Text Studio</h1>
+    <p>Large-text formatter, sentiment colourizer, and export dashboard.</p>
+  </div>
+  <div class="status-card">
+    <b id="readyState">Loading lexicons...</b>
+    <span id="lexiconStats">Please wait</span>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel input-panel">
+    <h2>1. Input</h2>
+    <textarea id="inputText" spellcheck="true" placeholder="Paste text here. Designed for very large documents; for extreme texts, process in chunks."></textarea>
+    <div class="row">
+      <button id="sampleBtn">Load Sample</button>
+      <button id="clearBtn">Clear</button>
+      <label class="file">
+        Import .txt
+        <input id="fileInput" type="file" accept=".txt,.md,.csv,.html">
+      </label>
+    </div>
+    <div class="meter">
+      <div id="limitBar"></div>
+    </div>
+    <div class="mini-stats">
+      <span id="charCount">0 chars</span>
+      <span id="wordCount">0 words</span>
+      <span id="lineCount">0 lines</span>
+    </div>
+  </section>
+
+  <section class="panel controls-panel">
+    <h2>2. Formatting + Colour System</h2>
+    <div class="control-grid">
+      <label>Output style
+        <select id="formatMode">
+          <option value="paragraphs">Paragraphs</option>
+          <option value="sentences">Sentence blocks</option>
+          <option value="poetry">Line preserved</option>
+          <option value="compact">Compact flowing text</option>
+        </select>
+      </label>
+      <label>Colour metric
+        <select id="metricMode">
+          <option value="sentiment">Positive / Negative / Neutral</option>
+          <option value="intensity">Sentiment intensity</option>
+          <option value="density">Local sentiment density</option>
+          <option value="random">Random word colour</option>
+          <option value="hybrid">Hybrid sentiment + random</option>
+        </select>
+      </label>
+      <label>Scale
+        <select id="scaleMode">
+          <option value="linear">Linear</option>
+          <option value="sqrt">Square-root</option>
+          <option value="log">Logarithmic</option>
+          <option value="binary">Binary</option>
+        </select>
+      </label>
+      <label>Palette
+        <select id="paletteMode">
+          <option value="classic">Classic green/red</option>
+          <option value="heat">Heat map</option>
+          <option value="coolwarm">Cool / Warm</option>
+          <option value="neon">Neon</option>
+          <option value="print">Print-safe</option>
+        </select>
+      </label>
+      <label>Font
+        <select id="fontMode">
+          <option value="system">System</option>
+          <option value="serif">Serif</option>
+          <option value="mono">Monospace</option>
+          <option value="book">Book style</option>
+        </select>
+      </label>
+      <label>Font size
+        <input id="fontSize" type="range" min="12" max="28" value="18">
+      </label>
+      <label>Colour strength
+        <input id="strength" type="range" min="0" max="100" value="72">
+      </label>
+      <label>Window size
+        <input id="windowSize" type="range" min="3" max="31" step="2" value="9">
+      </label>
+    </div>
+    <div class="row">
+      <button id="processBtn" class="primary">Format + Colourize</button>
+      <button id="stopBtn">Stop</button>
+      <button id="renderAllBtn">Render Full Preview</button>
+    </div>
+    <p class="note">The live preview is virtualized for speed. “Render Full Preview” can be heavy on million-word documents.</p>
+  </section>
+
+  <section class="panel dashboard-panel">
+    <h2>3. Sentiment Dashboard</h2>
+    <div class="cards">
+      <div class="card"><span>Positive</span><b id="posCount">0</b></div>
+      <div class="card"><span>Negative</span><b id="negCount">0</b></div>
+      <div class="card"><span>Neutral</span><b id="neuCount">0</b></div>
+      <div class="card"><span>Score</span><b id="score">0.000</b></div>
+    </div>
+    <canvas id="chart" width="720" height="220"></canvas>
+    <div class="legend">
+      <span><i class="pos"></i> Positive</span>
+      <span><i class="neg"></i> Negative</span>
+      <span><i class="neu"></i> Neutral</span>
+    </div>
+  </section>
+
+  <section class="panel preview-panel">
+    <h2>4. Preview</h2>
+    <div class="toolbar">
+      <button id="zoomOut">A−</button>
+      <button id="zoomIn">A+</button>
+      <button id="copyHtmlBtn">Copy HTML</button>
+      <button id="copyPlainBtn">Copy Plain</button>
+    </div>
+    <article id="preview" class="preview"></article>
+  </section>
+
+  <section class="panel exports-panel">
+    <h2>5. Export</h2>
+    <div class="export-grid">
+      <button id="exportHtml">Export HTML</button>
+      <button id="exportTxt">Export formatted TXT</button>
+      <button id="exportJson">Export analysis JSON</button>
+      <button id="exportCsv">Export word CSV</button>
+      <button id="exportPdf">Export PDF / Print</button>
+      <button id="exportProject">Export settings JSON</button>
+    </div>
+    <p class="note">PDF export opens a print-ready page. Use your browser’s “Save as PDF”. This keeps the app static and GitHub-compatible.</p>
+  </section>
+</main>
+
+<footer>
+  <span>Static HTML app. No server required. Works on GitHub Pages.</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
